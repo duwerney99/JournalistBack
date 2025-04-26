@@ -21,6 +21,54 @@ class AuthRepository {
     }
   };
 
+
+  static async getUsers() {
+    try {
+      const connect = await getConnection();
+      const response = await connect.query("SELECT * FROM public.users");
+      return response.rows;
+    } catch (e) {
+      console.error(`No se pudo obtener los usuarios, Error:`, e.message);
+      throw new Error('Error al obtener los usuarios: ' + e.message);
+    }
+  };
+
+  static async getUserById(userId) {
+    try {
+      const connect = await getConnection();
+      const response = await connect.query("SELECT * FROM public.users WHERE id = $1", [userId]);
+      return response.rows;
+    } catch (e) {
+      console.error(`No se pudo obtener el usuario con ID: ${usuarioId}. Error:`, e.message);
+      throw new Error('Error al obtener el usuario: ' + e.message);
+    }
+
+  };
+
+
+  static async updateUser(user) {
+    try {
+      const connect = await getConnection();
+      console.log("user", user)
+      const userUpdate = {
+        password: await encrypt.encrypt(user.password),
+        name: user.name,
+        role: user.role,
+        create_at: new Date(),
+      };
+      const sql = `UPDATE public.users SET password = $1, name = $2, role = $3, create_at = $4 WHERE id = $5`;
+      await connect.query(sql, [
+        userUpdate.password,
+        userUpdate.name,
+        userUpdate.role,
+        userUpdate.create_at,
+        user.id
+      ]);
+    } catch (e) {
+      console.error(`No se pudo actualizar el usuario con ID: ${usuario.id}. Error:`, e.message);
+      throw new Error('Error al actualizar el usuario: ' + e.message);
+    }
+  }
  
 }
 
