@@ -1,6 +1,6 @@
-const AuthRegister = require("../services/auth/AuthRegister");
-const GetUsers = require("../services/auth/GetUsers");
-const UpdateUser = require("../services/auth/UpdateUser");
+const AuthRegister = require("../services/auth/AuthRegisterService");
+const GetUsers = require("../services/auth/GetUsersService");
+const UpdateUser = require("../services/auth/UpdateUserService");
 
 class AuthController {
     static async registerUser(req, res) {
@@ -44,6 +44,21 @@ class AuthController {
             console.log("Error actualizando usuario ", e);
         }
     }
+
+    static async deleteUser (req, res) {
+        try {
+            const response = await eliminarUsuario.ejecutar(req.params.usuarioId);
+            res.send({ status: "OK", data: response });
+        } catch (e) {
+            if (e.message.includes('No se pudo verificar la existencia del usuario')) {
+                res.status(500).json({ error: 'Error interno del servidor' });
+            } else if (e.message.includes('Usuario con ID')) {
+                res.status(404).json({ error: e.message });
+            } else {
+                res.status(500).json({ error: 'Error interno del servidor' });
+            }
+        }
+    };
 }
 
 module.exports = AuthController

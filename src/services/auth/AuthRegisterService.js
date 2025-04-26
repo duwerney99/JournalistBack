@@ -2,7 +2,7 @@
 const encrypt = require("../../utils/bcrypt");
 const AuthRepository = require("../../repositories/AuthRepository");
 
-class AuthRegister {
+class AuthRegisterService {
 
   static async execute(user) {
     try {
@@ -19,4 +19,4 @@ class AuthRegister {
   }
 }
 
-module.exports = AuthRegister;
+module.exports = AuthRegisterService;

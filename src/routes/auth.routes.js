@@ -15,4 +15,6 @@ routes.get("/find-user-id/:userId", auth, AuthController.getUserId);
 
 routes.put("/update-user", auth, AuthController.updateUser);
 
+routes.delete("/delete-user/:userId", auth, AuthController.deleteUser);
+
 module.exports = routes
