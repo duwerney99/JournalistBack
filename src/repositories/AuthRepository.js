@@ -65,11 +65,23 @@ class AuthRepository {
         user.id
       ]);
     } catch (e) {
-      console.error(`No se pudo actualizar el usuario con ID: ${usuario.id}. Error:`, e.message);
+      console.error(`No se pudo actualizar el usuario con ID: ${user.id}. Error:`, e.message);
       throw new Error('Error al actualizar el usuario: ' + e.message);
     }
   }
  
+
+  static async deleteUser(userId) {
+    try {
+      const connect = await getConnection();
+      const deleteUser = `DELETE FROM public.users WHERE id = $1`;
+      await connect.query(deleteUser, [userId]);
+    } catch (e) {
+      console.error(`No se pudo eliminar el usuario con ID: ${userId}. Error:`, e.message);
+      throw new Error('Error al eliminar el usuario: ' + e.message);
+    }
+
+  }
 }
 
 module.exports = AuthRepository;

@@ -1,4 +1,5 @@
 const AuthRegister = require("../services/auth/AuthRegisterService");
+const DeleteUserService = require("../services/auth/DeleteUserService");
 const GetUsers = require("../services/auth/GetUsersService");
 const UpdateUser = require("../services/auth/UpdateUserService");
 
@@ -47,7 +48,7 @@ class AuthController {
 
     static async deleteUser (req, res) {
         try {
-            const response = await eliminarUsuario.ejecutar(req.params.usuarioId);
+            const response = await DeleteUserService.execute(req.params.userId);
             res.send({ status: "OK", data: response });
         } catch (e) {
             if (e.message.includes('No se pudo verificar la existencia del usuario')) {
