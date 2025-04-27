@@ -1,25 +1,37 @@
 const { Pool } = require('pg');
 require('dotenv').config();
- 
-const connc = new Pool({
-    // host: process.env.CLOUD_SQL_CONNECTION_NAME ? `/cloudsql/${process.env.CLOUD_SQL_CONNECTION_NAME}` : 'localhost',
-    host: 'localhost',
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    port: process.env.CLOUD_SQL_CONNECTION_NAME ? 5432 : 5432, 
-    ssl: false
+
+const pool = new Pool({
+    host: process.env.POSTGRES_HOST || 'localhost',
+    port: process.env.POSTGRES_PORT || 5432,
+    user: process.env.POSTGRES_USER || 'postgres',
+    password: process.env.POSTGRES_PASSWORD || '12345',
+    database: process.env.POSTGRES_DB || 'journalist_back',
+    ssl: false,
 });
- 
-const getConnection = async () => {
-    try {
-        return connc;
-    } catch (error) {
-        console.error('Error connect to database:', error);
-        throw error;
+
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+
+const getConnection = async (retries = 5) => {
+    while (retries) {
+        try {
+            const client = await pool.connect();
+            console.log('✅ Conexión a PostgreSQL exitosa');
+            client.release();
+            return pool;
+        } catch (error) {
+            console.error('❌ Error conectando a PostgreSQL:', error.message);
+            retries -= 1;
+            console.log(`Reintentando conexión a PostgreSQL... (${retries} intentos restantes)`);
+            await delay(2000);
+        }
     }
+    throw new Error('No se pudo conectar a PostgreSQL después de varios intentos');
+
 };
- 
+
 module.exports = {
     getConnection
 };
