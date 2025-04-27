@@ -10,7 +10,7 @@ function verificaToken(req, res, next) {
 
   try {
     const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    req.username = payload.nombre;  
+    req.user = payload;  
     next(); 
   } catch (error) {
     return res.status(403).json({ message: "Token no válido" });
