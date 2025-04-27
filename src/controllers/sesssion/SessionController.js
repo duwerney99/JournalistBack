@@ -4,9 +4,7 @@ const MarkEntryService = require("../../services/sessions/MarkEntryService");
 class SessionController {
   static async markEntry(req, res) {
     try {
-      console.log("req ", req.user)
       const { userId } = req.user;
-      console.log("userId ", userId)
       const { date, entryTime } = req.body;
       const result = await MarkEntryService.execute(userId, date, entryTime);
       res.send({ status: 'OK', data: result });
@@ -15,8 +13,6 @@ class SessionController {
       res.status(500).send({ error: error.message });
     }
   }
-
-  
 }
 
 module.exports = SessionController;
