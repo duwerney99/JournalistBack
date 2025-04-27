@@ -6,5 +6,8 @@ const SessionController = require("../controllers/sesssion/SessionController");
 
 routes.post('/sessions/entry', auth, SessionController.markEntry);
 
+routes.post('/sessions/exit', auth, SessionController.markExit);
+
+routes.get('/sessions/resume', auth, SessionController.resumeHours);
 
 module.exports = routes
