@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend_network
+      
+
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: 
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backend_network
+
+  backend:
+    build: .
+    container_name: backend
+    ports:
+      - "8081:8081"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+      - postgres
+    networks:
+      - backend_network
+    
+  frontend:
+    build:
+      context: ../journalist-front
+    container_name: frontend
+    ports:
+      - "3000:80"  
+    depends_on:
+      - backend
+    networks:
+      - backend_network
+
+volumes:
+  mongo_data:
+  postgres_data:
+
+networks:
+  backend_network:
