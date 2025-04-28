@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require('cors');
 const express = require("express");
 const connectMongo = require('./src/config/dbMongo');
 const { getConnection } = require('./src/config/dbSql');
@@ -16,7 +17,10 @@ const InitServer = async () => {
         await connectMongo();
         await getConnection();
 
-
+        app.use(cors({
+            origin: 'http://localhost:3000',
+            credentials: true
+        }));
         app.use(express.json());
         app.use('/api', authRoutes);
         app.use('/api', sessionRoutes);
