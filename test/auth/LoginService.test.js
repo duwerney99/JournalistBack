@@ -14,8 +14,8 @@ describe('LoginService', () => {
   });
 
   it('debería generar un token exitosamente si el login es correcto', async () => {
-    const mockUser = { email: 'test@example.com', password: '123456' };
-    const dbUser = { id: 1, name: 'Test User', email: 'test@example.com', password: 'hashed_password' };
+    const mockUser = { email: 'santiago@gmail.com', password: '123456' };
+    const dbUser = { id: 1, name: 'Santiago', email: 'santiago@gmail.com', password: '123456' };
 
     const mockConnection = {
       query: jest.fn().mockResolvedValue({ rows: [dbUser] }),
@@ -41,7 +41,7 @@ describe('LoginService', () => {
   });
 
   it('debería lanzar error si el usuario no existe', async () => {
-    const mockUser = { email: 'test@example.com', password: '123456' };
+    const mockUser = { email: 'santiago@gmail.com', password: '123456' };
 
     const mockConnection = {
       query: jest.fn().mockResolvedValue({ rows: [] }),
@@ -52,8 +52,8 @@ describe('LoginService', () => {
   });
 
   it('debería lanzar error si la contraseña es incorrecta', async () => {
-    const mockUser = { email: 'test@example.com', password: '123456' };
-    const dbUser = { id: 1, name: 'Test User', email: 'test@example.com', password: 'hashed_password' };
+    const mockUser = { email: 'santiago@gmail.com', password: '123456' };
+    const dbUser = { id: 1, name: 'Santiago', email: 'santiago@gmail.com', password: '123456' };
 
     const mockConnection = {
       query: jest.fn().mockResolvedValue({ rows: [dbUser] }),
@@ -67,8 +67,8 @@ describe('LoginService', () => {
   it('debería lanzar error si falta la variable ACCESS_TOKEN_SECRET', async () => {
     delete process.env.ACCESS_TOKEN_SECRET; 
 
-    const mockUser = { email: 'test@example.com', password: '123456' };
-    const dbUser = { id: 1, name: 'Test User', email: 'test@example.com', password: 'hashed_password' };
+    const mockUser = { email: 'santiago@gmail.com', password: '123456' };
+    const dbUser = { id: 1, name: 'Santiago', email: 'santiago@gmail.com', password: '123456' };
 
     const mockConnection = {
       query: jest.fn().mockResolvedValue({ rows: [dbUser] }),
